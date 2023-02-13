@@ -1,5 +1,6 @@
 package com.example.pcrhelper
 
+import com.example.pcrsplitboxforandroid.MainActivity
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -34,11 +35,36 @@ object Util {
     )
     const val sysName: String = "Ikaros"
 
-    lateinit var banList: List<String>
-    lateinit var lackList: List<String>
+    var banList: List<String>
+    var lackList: List<String>
 
     init {
-
+        var tempResultList = ConfigurationDatabase
+            .getInstance(MainActivity.context)
+            .getConfigurationDao()
+            .getAllByTitle("banList")
+        banList = if (tempResultList.isEmpty()) {
+            ConfigurationDatabase
+                .getInstance(MainActivity.context)
+                .getConfigurationDao()
+                .insertConfig(Configuration("banList", listToString(emptyList())))
+            emptyList()
+        } else {
+            stringToList(tempResultList[0].content ?: "[]")
+        }
+        tempResultList = ConfigurationDatabase
+            .getInstance(MainActivity.context)
+            .getConfigurationDao()
+            .getAllByTitle("lackList")
+        lackList = if (tempResultList.isEmpty()) {
+            ConfigurationDatabase
+                .getInstance(MainActivity.context)
+                .getConfigurationDao()
+                .insertConfig(Configuration("lackList", listToString(emptyList())))
+            emptyList()
+        } else {
+            stringToList(tempResultList[0].content ?: "[]")
+        }
     }
 
     fun jsonStringToMap(jsonStringTemp: String): HashMap<String, Any> {
@@ -64,6 +90,23 @@ object Util {
         return JSONObject(jsonMapTemp as Map<*, *>).toString()
     }
 
+    fun stringToList(string: String): List<String> {
+        if (string.length == 2) {
+            return emptyList()
+        }
+        val subString: String = string.substring(1, string.length - 1)
+        val arr: List<String> = subString.split(", ")
+        val res: MutableList<String> = mutableListOf()
+        arr.forEach {
+            res.add(it)
+        }
+        return res
+    }
+
+    fun listToString(list: List<String>): String {
+        return list.toString()
+    }
+
     fun sysPrint(content: String) {
         println("$sysName: $content")
     }
@@ -78,7 +121,7 @@ object Util {
         return "${sn[0]}$num"
     }
 
-    fun feasible1(h1: Homework): Boolean {
+    private fun feasible1(h1: Homework): Boolean {
         val nameSet: HashSet<String> = HashSet()
         h1.nameList.forEach {
             if (!lackList.contains(it)) {
@@ -88,7 +131,7 @@ object Util {
         return nameSet.size >= 4
     }
 
-    fun feasible2(h1: Homework, h2: Homework): Boolean {
+    private fun feasible2(h1: Homework, h2: Homework): Boolean {
         if (!feasible1(h1) || !feasible1(h2)) {
             return false
         }
@@ -142,7 +185,7 @@ object Util {
     }
 
     fun debugMainFunction(): String {
-        return "${123}"
+        return "$lackList"
     }
 
 }
