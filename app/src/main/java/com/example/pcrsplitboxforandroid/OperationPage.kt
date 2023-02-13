@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -166,10 +166,19 @@ fun SelectCard() {
 
 @Composable
 fun ResultCard() {
+    var debugContent by remember { mutableStateOf("") }
+
     CardBorder {
         /*TODO*/
+        Button(
+            onClick = {
+                debugContent = Util.debugMainFunction()
+            }
+        ) {
+            Text(text = "Go!")
+        }
         Text(
-            text = "Debug Log\n${Util.debugMainFunction()}",
+            text = "Debug Log\n$debugContent",
             modifier = Modifier.padding(bottom = 16.dp)
         )
     }

@@ -185,7 +185,14 @@ object Util {
     }
 
     fun debugMainFunction(): String {
-        return "$lackList"
+//        DataHandler.requestDataAndSave()
+        val temp: List<Configuration> = ConfigurationDatabase.getInstance(MainActivity.context).getConfigurationDao().getAllByTitle("icon")
+        return if (temp.isEmpty()) {
+            "null"
+        } else {
+            val icon: String? = temp[0].content
+            icon ?: "null"
+        }
     }
 
 }
