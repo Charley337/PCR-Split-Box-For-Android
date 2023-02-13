@@ -149,9 +149,9 @@ object Util {
         return nameSet.size >= 8
     }
 
-    fun feasible3(h1: Homework, h2: Homework, h3: Homework): List<Any> {
+    fun feasible3(h1: Homework, h2: Homework, h3: Homework): List<String>? {
         if (!feasible2(h1, h2) || !feasible2(h1, h3) || !feasible2(h2, h3)) {
-            return listOf(false, emptyList<String>())
+            return null
         }
         val nameSet: HashSet<String> = HashSet()
         val borrow: MutableList<String> = mutableListOf()
@@ -178,9 +178,9 @@ object Util {
             }
         }
         return if (borrow.size > 3) {
-            listOf(false, emptyList<String>())
+            null
         } else {
-            listOf(true, borrow as List<String>)
+            borrow
         }
     }
 
