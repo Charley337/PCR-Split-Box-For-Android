@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pcrhelper.Util
+import androidx.lifecycle.ViewModelProvider
 
 @Composable
 fun CardBorder(content: @Composable ColumnScope.() -> Unit) {
@@ -115,7 +115,7 @@ fun BaseCard() {
                                     shape = RoundedCornerShape(2.dp)
                                 )
                                 .clickable {
-                                    UiState.chooseStageState = i
+                                    MainViewModel.chooseStageState = i
                                     btnChooseStageState = !btnChooseStageState
                                     btnChooseStageText = "  当前阶段:  ${numberToChar[i]}  面  "
                                 }
@@ -132,7 +132,7 @@ fun BaseCard() {
                             shape = RoundedCornerShape(4.dp)
                         )
                         .clickable {
-                            UiState.chooseStageState = 0
+                            MainViewModel.chooseStageState = 0
                             btnChooseStageState = !btnChooseStageState
                         }
                 )
@@ -185,7 +185,7 @@ fun SelectCard() {
                                         shape = RoundedCornerShape(2.dp)
                                     )
                                     .clickable {
-                                        UiState.chooseBossState[i] = j
+                                        MainViewModel.chooseBossState[i] = j
                                         btnListChooseBossText[i] = "  ${numberToCharacter[j]}  王  "
                                         val tempMutableList: MutableList<Boolean> = mutableListOf()
                                         for (k in 0 until 3) {
@@ -210,7 +210,7 @@ fun SelectCard() {
                                 shape = RoundedCornerShape(4.dp)
                             )
                             .clickable {
-                                UiState.chooseBossState[i] = 0
+                                MainViewModel.chooseBossState[i] = 0
                                 val tempMutableList: MutableList<Boolean> = mutableListOf()
                                 for (j in 0 until 3) {
                                     if (i == j) {
@@ -237,7 +237,7 @@ fun ResultCard() {
         Button(
             onClick = {
 //                debugContent = Util.debugMainFunction()
-                debugContent = "UiState: {chooseStageState: ${UiState.chooseStageState}, chooseBossState: ${UiState.chooseBossState}}"
+                debugContent = "UiState: {chooseStageState: ${MainViewModel.chooseStageState}, chooseBossState: ${MainViewModel.chooseBossState}}"
             }
         ) {
             Text(text = "Go!")

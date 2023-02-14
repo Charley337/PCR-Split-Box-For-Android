@@ -185,7 +185,9 @@ object Util {
     }
 
     fun debugMainFunction(): String {
-//        DataHandler.requestDataAndSave()
+
+        DataHandler.requestDataAndSave()
+
         val temp: List<Configuration> = ConfigurationDatabase.getInstance(MainActivity.context).getConfigurationDao().getAllByTitle("icon")
         return if (temp.isEmpty()) {
             "null"
