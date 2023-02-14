@@ -45,6 +45,10 @@ fun CardBorder(content: @Composable ColumnScope.() -> Unit) {
 
 @Composable
 fun BaseCard() {
+    var btnChooseStageState by remember { mutableStateOf(false) }
+    var btnChooseStageText: String = "  请选择当前阶段  "
+    val numberToChar: String = " ABCDEFG"
+
     CardBorder {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -96,16 +100,43 @@ fun BaseCard() {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            Text(
-                text = "  请选择当前阶段  ",
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .clickable { /*TODO*/ }
-            )
+            if (btnChooseStageState) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    for (i in 1..5) {
+                        Text(
+                            text = "  选择阶段:  ${numberToChar[i]}  面  ",
+                            modifier = Modifier
+                                .border(
+                                    width = 1.dp,
+                                    color = Color.Gray,
+                                    shape = RoundedCornerShape(2.dp)
+                                )
+                                .clickable {
+                                    UiState.chooseStageState = i
+                                    btnChooseStageState = !btnChooseStageState
+                                    btnChooseStageText = "  当前阶段:  ${numberToChar[i]}  面  "
+                                }
+                        )
+                    }
+                }
+            } else {
+                Text(
+                    text = btnChooseStageText,
+                    modifier = Modifier
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .clickable {
+                            UiState.chooseStageState = 0
+                            btnChooseStageState = !btnChooseStageState
+                        }
+                )
+            }
             Button(
                 modifier = Modifier.clip(RoundedCornerShape(10.dp)),
                 onClick = { /*TODO*/ }
@@ -118,6 +149,14 @@ fun BaseCard() {
 
 @Composable
 fun SelectCard() {
+    var btnListChooseBossState by remember { mutableStateOf(listOf(false, false, false)) }
+    val numberToCharacter: Array<String> = arrayOf(
+        "零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"
+    )
+    val btnListChooseBossText: MutableList<String> = mutableListOf(
+        "  选  择  ", "  选  择  ", "  选  择  "
+    )
+
     CardBorder {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -130,36 +169,61 @@ fun SelectCard() {
                 text = "选择Boss",
                 fontWeight = FontWeight.Bold
             )
-            Text(
-                text = "  选  择  ",
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(4.dp)
+            for (i in 0 until 3) {
+                if (btnListChooseBossState[i]) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        for (j in 1..5) {
+                            Text(
+                                text = "  ${numberToCharacter[j]}  王  ",
+                                modifier = Modifier
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Gray,
+                                        shape = RoundedCornerShape(2.dp)
+                                    )
+                                    .clickable {
+                                        UiState.chooseBossState[i] = j
+                                        btnListChooseBossText[i] = "  ${numberToCharacter[j]}  王  "
+                                        val tempMutableList: MutableList<Boolean> = mutableListOf()
+                                        for (k in 0 until 3) {
+                                            if (i == k) {
+                                                tempMutableList.add(!btnListChooseBossState[k])
+                                            } else {
+                                                tempMutableList.add(btnListChooseBossState[k])
+                                            }
+                                        }
+                                        btnListChooseBossState = tempMutableList
+                                    }
+                            )
+                        }
+                    }
+                } else {
+                    Text(
+                        text = btnListChooseBossText[i],
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = Color.Gray,
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .clickable {
+                                UiState.chooseBossState[i] = 0
+                                val tempMutableList: MutableList<Boolean> = mutableListOf()
+                                for (j in 0 until 3) {
+                                    if (i == j) {
+                                        tempMutableList.add(!btnListChooseBossState[j])
+                                    } else {
+                                        tempMutableList.add(btnListChooseBossState[j])
+                                    }
+                                }
+                                btnListChooseBossState = tempMutableList
+                            }
                     )
-                    .clickable { /*TODO*/ }
-            )
-            Text(
-                text = "  选  择  ",
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .clickable { /*TODO*/ }
-            )
-            Text(
-                text = "  选  择  ",
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .clickable { /*TODO*/ }
-            )
+                }
+            }
         }
     }
 }
@@ -172,7 +236,8 @@ fun ResultCard() {
         /*TODO*/
         Button(
             onClick = {
-                debugContent = Util.debugMainFunction()
+//                debugContent = Util.debugMainFunction()
+                debugContent = "UiState: {chooseStageState: ${UiState.chooseStageState}, chooseBossState: ${UiState.chooseBossState}}"
             }
         ) {
             Text(text = "Go!")
