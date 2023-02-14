@@ -33,6 +33,8 @@ object Util {
         "E4" to 3.8,
         "E5" to 4.0
     )
+    const val numberToZhChar: String = "零一二三四五六七八九十"
+    const val numberToEnChar: String = "-ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     const val sysName: String = "Ikaros"
 
     var banList: List<String>
@@ -181,19 +183,6 @@ object Util {
             null
         } else {
             borrow
-        }
-    }
-
-    fun debugMainFunction(): String {
-
-        DataHandler.requestDataAndSave()
-
-        val temp: List<Configuration> = ConfigurationDatabase.getInstance(MainActivity.context).getConfigurationDao().getAllByTitle("icon")
-        return if (temp.isEmpty()) {
-            "null"
-        } else {
-            val icon: String? = temp[0].content
-            icon ?: "null"
         }
     }
 

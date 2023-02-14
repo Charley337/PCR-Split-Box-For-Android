@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
+import com.example.pcrhelper.Util
 
 @Composable
 fun CardBorder(content: @Composable ColumnScope.() -> Unit) {
@@ -44,11 +44,7 @@ fun CardBorder(content: @Composable ColumnScope.() -> Unit) {
 }
 
 @Composable
-fun BaseCard() {
-    var btnChooseStageState by remember { mutableStateOf(false) }
-    var btnChooseStageText: String = "  请选择当前阶段  "
-    val numberToChar: String = " ABCDEFG"
-
+fun BaseCard(mainViewModel: MainViewModel) {
     CardBorder {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -87,7 +83,7 @@ fun BaseCard() {
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .padding(top = 8.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = { mainViewModel.onBtnGetDataClicked() }
                 ) {
                     Text(text = "点击获取")
                 }
@@ -100,41 +96,34 @@ fun BaseCard() {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            if (btnChooseStageState) {
+            if (mainViewModel.btnChooseStageState) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     for (i in 1..5) {
                         Text(
-                            text = "  选择阶段:  ${numberToChar[i]}  面  ",
+                            text = "  选择阶段:  ${Util.numberToEnChar[i]}  面  ",
                             modifier = Modifier
                                 .border(
                                     width = 1.dp,
                                     color = Color.Gray,
                                     shape = RoundedCornerShape(2.dp)
                                 )
-                                .clickable {
-                                    MainViewModel.chooseStageState = i
-                                    btnChooseStageState = !btnChooseStageState
-                                    btnChooseStageText = "  当前阶段:  ${numberToChar[i]}  面  "
-                                }
+                                .clickable { mainViewModel.onBtnChooseStageClicked2(i) }
                         )
                     }
                 }
             } else {
                 Text(
-                    text = btnChooseStageText,
+                    text = mainViewModel.btnChooseStageText,
                     modifier = Modifier
                         .border(
                             width = 1.dp,
                             color = Color.Gray,
                             shape = RoundedCornerShape(4.dp)
                         )
-                        .clickable {
-                            MainViewModel.chooseStageState = 0
-                            btnChooseStageState = !btnChooseStageState
-                        }
+                        .clickable { mainViewModel.onBtnChooseStageClicked1() }
                 )
             }
             Button(
@@ -148,15 +137,7 @@ fun BaseCard() {
 }
 
 @Composable
-fun SelectCard() {
-    var btnListChooseBossState by remember { mutableStateOf(listOf(false, false, false)) }
-    val numberToCharacter: Array<String> = arrayOf(
-        "零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"
-    )
-    val btnListChooseBossText: MutableList<String> = mutableListOf(
-        "  选  择  ", "  选  择  ", "  选  择  "
-    )
-
+fun SelectCard(mainViewModel: MainViewModel) {
     CardBorder {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -170,57 +151,34 @@ fun SelectCard() {
                 fontWeight = FontWeight.Bold
             )
             for (i in 0 until 3) {
-                if (btnListChooseBossState[i]) {
+                if (mainViewModel.btnListChooseBossState[i]) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         for (j in 1..5) {
                             Text(
-                                text = "  ${numberToCharacter[j]}  王  ",
+                                text = "  ${Util.numberToZhChar[j]}  王  ",
                                 modifier = Modifier
                                     .border(
                                         width = 1.dp,
                                         color = Color.Gray,
                                         shape = RoundedCornerShape(2.dp)
                                     )
-                                    .clickable {
-                                        MainViewModel.chooseBossState[i] = j
-                                        btnListChooseBossText[i] = "  ${numberToCharacter[j]}  王  "
-                                        val tempMutableList: MutableList<Boolean> = mutableListOf()
-                                        for (k in 0 until 3) {
-                                            if (i == k) {
-                                                tempMutableList.add(!btnListChooseBossState[k])
-                                            } else {
-                                                tempMutableList.add(btnListChooseBossState[k])
-                                            }
-                                        }
-                                        btnListChooseBossState = tempMutableList
-                                    }
+                                    .clickable { mainViewModel.onBtnListChooseBossClicked2(i, j) }
                             )
                         }
                     }
                 } else {
                     Text(
-                        text = btnListChooseBossText[i],
+                        text = mainViewModel.btnListChooseBossText[i],
                         modifier = Modifier
                             .border(
                                 width = 1.dp,
                                 color = Color.Gray,
                                 shape = RoundedCornerShape(4.dp)
                             )
-                            .clickable {
-                                MainViewModel.chooseBossState[i] = 0
-                                val tempMutableList: MutableList<Boolean> = mutableListOf()
-                                for (j in 0 until 3) {
-                                    if (i == j) {
-                                        tempMutableList.add(!btnListChooseBossState[j])
-                                    } else {
-                                        tempMutableList.add(btnListChooseBossState[j])
-                                    }
-                                }
-                                btnListChooseBossState = tempMutableList
-                            }
+                            .clickable { mainViewModel.onBtnListChooseBossClicked1(i) }
                     )
                 }
             }
@@ -229,42 +187,37 @@ fun SelectCard() {
 }
 
 @Composable
-fun ResultCard() {
-    var debugContent by remember { mutableStateOf("") }
-
+fun ResultCard(mainViewModel: MainViewModel) {
     CardBorder {
         /*TODO*/
         Button(
-            onClick = {
-//                debugContent = Util.debugMainFunction()
-                debugContent = "UiState: {chooseStageState: ${MainViewModel.chooseStageState}, chooseBossState: ${MainViewModel.chooseBossState}}"
-            }
+            onClick = { mainViewModel.onBtnGoClicked() }
         ) {
             Text(text = "Go!")
         }
         Text(
-            text = "Debug Log\n$debugContent",
+            text = "Debug Log\n${mainViewModel.debugContent}",
             modifier = Modifier.padding(bottom = 16.dp)
         )
     }
 }
 
 @Composable
-fun OperationPage() {
+fun OperationPage(mainViewModel: MainViewModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        BaseCard()
-        SelectCard()
-        ResultCard()
+        BaseCard(mainViewModel)
+        SelectCard(mainViewModel)
+        ResultCard(mainViewModel)
     }
 }
 
-@Preview
-@Composable
-fun OperationPagePreview() {
-    OperationPage()
-}
+//@Preview
+//@Composable
+//fun OperationPagePreview() {
+//    OperationPage()
+//}
