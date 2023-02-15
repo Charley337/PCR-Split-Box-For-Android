@@ -1,8 +1,6 @@
 package com.example.pcrhelper
 
 import com.example.pcrsplitboxforandroid.MainActivity
-import org.json.JSONException
-import org.json.JSONObject
 
 object Util {
 
@@ -69,30 +67,7 @@ object Util {
         }
     }
 
-    fun jsonStringToMap(jsonStringTemp: String): HashMap<String, Any> {
-        try {
-            val jsonObjectTemp = JSONObject(jsonStringTemp)
-            val keys = jsonObjectTemp.keys()
-            val jsonMapTemp: HashMap<String, Any> = HashMap()
-            var key: String
-            var value: Any
-            while (keys.hasNext()) {
-                key = keys.next()
-                value = jsonObjectTemp[key] as Any
-                jsonMapTemp[key] = value
-            }
-            return jsonMapTemp
-        } catch (e: JSONException) {
-            e.printStackTrace()
-            return HashMap()
-        }
-    }
-
-    fun jsonMapToString(jsonMapTemp: HashMap<String, Any>): String {
-        return JSONObject(jsonMapTemp as Map<*, *>).toString()
-    }
-
-    fun stringToList(string: String): List<String> {
+    private fun stringToList(string: String): List<String> {
         if (string.length == 2) {
             return emptyList()
         }
@@ -105,7 +80,7 @@ object Util {
         return res
     }
 
-    fun listToString(list: List<String>): String {
+    private fun listToString(list: List<String>): String {
         return list.toString()
     }
 

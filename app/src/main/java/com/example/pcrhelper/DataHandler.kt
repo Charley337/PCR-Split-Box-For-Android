@@ -60,7 +60,6 @@ object DataHandler {
                         input.bufferedReader().readText()
                     }
                     receivedData = data
-                    println(data)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -80,13 +79,13 @@ object DataHandler {
     }
 
     suspend fun getData(): List<Boolean> {
-        val res1: RequestResult = getByUrlAndSave(baseUrl = baseUrl, pathUrl = dataUrl, title = "data")
-        if (res1.responseCode != 200) {
+        val dataRes: RequestResult = getByUrlAndSave(baseUrl = baseUrl, pathUrl = dataUrl, title = "data")
+        if (dataRes.responseCode != 200) {
             return listOf(false, false, false)
         }
 
-        val res2: RequestResult = getByUrlAndSave(baseUrl = baseUrl, pathUrl = iconUrl, title = "icon")
-        if (res2.responseCode != 200) {
+        val iconRes: RequestResult = getByUrlAndSave(baseUrl = baseUrl, pathUrl = iconUrl, title = "icon")
+        if (iconRes.responseCode != 200) {
             return listOf(true, false, false)
         }
 
