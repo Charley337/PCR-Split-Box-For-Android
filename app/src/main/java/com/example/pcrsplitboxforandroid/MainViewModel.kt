@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pcrhelper.Configuration
+import com.example.pcrhelper.ConfigurationDatabase
 import com.example.pcrhelper.DataHandler
 import com.example.pcrhelper.Util
 import kotlinx.coroutines.launch
@@ -25,12 +27,7 @@ class MainViewModel : ViewModel() {
 
     fun onBtnGetDataClicked() {
         viewModelScope.launch {
-            val res: Boolean = DataHandler.requestDataAndSave()
-            debugContent = if (res) {
-                "Succeeded"
-            } else {
-                "Failed"
-            }
+            debugContent = DataHandler.getData().toString()
         }
     }
 
@@ -67,7 +64,17 @@ class MainViewModel : ViewModel() {
     }
 
     fun onBtnGoClicked() {
-        debugContent = "UiState: {chooseStageState: ${chooseStageState}, chooseBossState: ${chooseBossState}}"
+        var tempBuf = "{"
+        val resList: List<Configuration> = ConfigurationDatabase
+            .getInstance(MainActivity.context)
+            .getConfigurationDao()
+            .getAll()
+        resList.forEach {
+            if (it.title == "icon") {
+                tempBuf += "\"${it.title}\": \"${it.content}\", "
+            }
+        }
+        debugContent = "${tempBuf.substring(0, tempBuf.length - 2)}}"
     }
 
 }

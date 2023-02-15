@@ -83,7 +83,7 @@ object Util {
             }
             return jsonMapTemp
         } catch (e: JSONException) {
-            /*TODO: call exception handler*/
+            e.printStackTrace()
             return HashMap()
         }
     }

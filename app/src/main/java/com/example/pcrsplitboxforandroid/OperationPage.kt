@@ -7,14 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pcrhelper.Util
@@ -197,7 +196,7 @@ fun ResultCard(mainViewModel: MainViewModel) {
         }
         Text(
             text = "Debug Log\n${mainViewModel.debugContent}",
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.fillMaxWidth(0.9F).padding(bottom = 16.dp)
         )
     }
 }
@@ -215,9 +214,3 @@ fun OperationPage(mainViewModel: MainViewModel) {
         ResultCard(mainViewModel)
     }
 }
-
-//@Preview
-//@Composable
-//fun OperationPagePreview() {
-//    OperationPage()
-//}
