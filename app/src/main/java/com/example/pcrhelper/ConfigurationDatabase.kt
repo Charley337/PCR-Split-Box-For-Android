@@ -21,7 +21,7 @@ abstract class ConfigurationDatabase : RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 ConfigurationDatabase::class.java,
-                "configs.db"
+                "pcr_configs.db"
             ).allowMainThreadQueries().build()
     }
 }

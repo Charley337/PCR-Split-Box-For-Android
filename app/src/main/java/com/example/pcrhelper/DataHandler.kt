@@ -4,6 +4,8 @@ import com.example.pcrsplitboxforandroid.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import org.json.JSONException
+import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.DeflaterInputStream
@@ -52,14 +54,13 @@ object DataHandler {
                 conn.connect()
                 conn.inputStream.use { input ->
                     val encoding: String? = conn.contentEncoding
-                    val data: String = if (encoding != null && encoding.contains("gzip")) {
+                    receivedData = if (encoding != null && encoding.contains("gzip")) {
                         GZIPInputStream(input).bufferedReader().readText()
                     } else if (encoding != null && encoding.contains("deflate")) {
                         DeflaterInputStream(input).bufferedReader().readText()
                     } else {
                         input.bufferedReader().readText()
                     }
-                    receivedData = data
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -89,14 +90,106 @@ object DataHandler {
             return listOf(true, false, false)
         }
 
-        return listOf(true, true, false)
-//        ConfigurationDatabase
-//            .getInstance(MainActivity.context)
-//            .getConfigurationDao()
-//            .insertConfig(
-//                Configuration(title = "idToName", content = "")
-//            )
-//        return listOf(true, true, true)
+        val iconJsonObj = JSONObject(iconRes.receivedData)
+        val idToName = JSONObject()
+        try {
+            val iconJsonData = iconJsonObj.getJSONArray("data")
+            for (i in 0 until iconJsonData.length()) {
+                for (j in 0 until iconJsonData.getJSONArray(i).length()) {
+                    idToName.put(
+                        iconJsonData.getJSONArray(i).getJSONObject(j).getString("id"),
+                        iconJsonData.getJSONArray(i).getJSONObject(j).getString("iconValue")
+                    )
+                }
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            return listOf(true, true, false)
+        }
+        ConfigurationDatabase
+            .getInstance(MainActivity.context)
+            .getConfigurationDao()
+            .insertConfig(
+                Configuration(title = "idToName", content = idToName.toString())
+            )
+        return listOf(true, true, true)
+    }
+
+    fun getHomeworksFromData(): Homeworks {
+        var tempResultList = ConfigurationDatabase
+            .getInstance(MainActivity.context)
+            .getConfigurationDao()
+            .getAllByTitle("data")
+        if (tempResultList.isEmpty()) {
+            println("Room database has not a key called \"data\"")
+            return Homeworks(emptyList())
+        }
+        val data = JSONObject(tempResultList[0].content)
+        tempResultList = ConfigurationDatabase
+            .getInstance(MainActivity.context)
+            .getConfigurationDao()
+            .getAllByTitle("idToName")
+        if (tempResultList.isEmpty()) {
+            println("Room database has not a key called \"idToName\"")
+            return Homeworks(emptyList())
+        }
+        val idToName = JSONObject(tempResultList[0].content)
+        val homeworkList: MutableList<Homework> = mutableListOf()
+        val snSet: HashSet<String> = HashSet()
+        val temp1Data = data.getJSONArray("data")
+        for (i in 0 until temp1Data.length()) {
+            val temp2Homework = temp1Data.getJSONObject(i).getJSONArray("homework")
+            for (j in 0 until temp2Homework.length()) {
+                val temp3J = temp2Homework.getJSONObject(j)
+                val sn = temp3J.getString("sn")
+                if (snSet.contains(sn)) {
+                    continue
+                }
+                snSet.add(sn)
+                val name1 = idToName.getString(temp3J.getJSONArray("unit").getString(0))
+                val name2 = idToName.getString(temp3J.getJSONArray("unit").getString(1))
+                val name3 = idToName.getString(temp3J.getJSONArray("unit").getString(2))
+                val name4 = idToName.getString(temp3J.getJSONArray("unit").getString(3))
+                val name5 = idToName.getString(temp3J.getJSONArray("unit").getString(4))
+                if (
+                    Util.banList.contains(name1) ||
+                    Util.banList.contains(name2) ||
+                    Util.banList.contains(name3) ||
+                    Util.banList.contains(name4) ||
+                    Util.banList.contains(name5)
+                ) {
+                    continue
+                }
+                val damage = temp3J.getInt("damage")
+                val auto = temp3J.getInt("auto")
+                val remain = temp3J.getInt("remain")
+                val video: MutableList<VideoInfo> = mutableListOf()
+                val videoArr = temp3J.getJSONArray("video")
+                for (k in 0 until videoArr.length()) {
+                    video.add(
+                        VideoInfo(
+                            text = videoArr.getJSONObject(k).getString("text"),
+                            url = videoArr.getJSONObject(k).getString("url")
+                        )
+                    )
+                }
+                homeworkList.add(
+                    Homework(
+                        name1 = name1,
+                        name2 = name2,
+                        name3 = name2,
+                        name4 = name2,
+                        name5 = name2,
+                        auto = auto,
+                        damage = damage,
+                        remain = remain,
+                        sn = sn,
+                        video = video
+                    )
+                )
+            }
+        }
+        return Homeworks(homeworkList)
     }
 
 }

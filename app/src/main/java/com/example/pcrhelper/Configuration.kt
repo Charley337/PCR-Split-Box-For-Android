@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "configurations")
 data class Configuration(
     @PrimaryKey val title: String,
-    @ColumnInfo(name = "content") val content: String?
+    @ColumnInfo(name = "content") val content: String
 )

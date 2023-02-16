@@ -1,6 +1,7 @@
 package com.example.pcrhelper
 
 import com.example.pcrsplitboxforandroid.MainActivity
+import org.json.JSONArray
 
 object Util {
 
@@ -47,10 +48,15 @@ object Util {
             ConfigurationDatabase
                 .getInstance(MainActivity.context)
                 .getConfigurationDao()
-                .insertConfig(Configuration("banList", listToString(emptyList())))
+                .insertConfig(Configuration("banList", JSONArray().toString()))
             emptyList()
         } else {
-            stringToList(tempResultList[0].content ?: "[]")
+            val tempList: MutableList<String> = mutableListOf()
+            val tempJsonArr = JSONArray(tempResultList[0].content)
+            for (i in 0 until tempJsonArr.length()) {
+                tempList.add(tempJsonArr.getString(i))
+            }
+            tempList
         }
         tempResultList = ConfigurationDatabase
             .getInstance(MainActivity.context)
@@ -60,28 +66,16 @@ object Util {
             ConfigurationDatabase
                 .getInstance(MainActivity.context)
                 .getConfigurationDao()
-                .insertConfig(Configuration("lackList", listToString(emptyList())))
+                .insertConfig(Configuration("lackList", JSONArray().toString()))
             emptyList()
         } else {
-            stringToList(tempResultList[0].content ?: "[]")
+            val tempList: MutableList<String> = mutableListOf()
+            val tempJsonArr = JSONArray(tempResultList[0].content)
+            for (i in 0 until tempJsonArr.length()) {
+                tempList.add(tempJsonArr.getString(i))
+            }
+            tempList
         }
-    }
-
-    private fun stringToList(string: String): List<String> {
-        if (string.length == 2) {
-            return emptyList()
-        }
-        val subString: String = string.substring(1, string.length - 1)
-        val arr: List<String> = subString.split(", ")
-        val res: MutableList<String> = mutableListOf()
-        arr.forEach {
-            res.add(it)
-        }
-        return res
-    }
-
-    private fun listToString(list: List<String>): String {
-        return list.toString()
     }
 
     fun sysPrint(content: String) {
