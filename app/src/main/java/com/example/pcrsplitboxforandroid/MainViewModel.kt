@@ -5,10 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pcrhelper.Configuration
-import com.example.pcrhelper.ConfigurationDatabase
-import com.example.pcrhelper.DataHandler
-import com.example.pcrhelper.Util
+import com.example.pcrhelper.*
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -24,6 +21,9 @@ class MainViewModel : ViewModel() {
 
     var chooseStageState: Int = 0
     var chooseBossState: MutableList<Int> = mutableListOf(0, 0, 0)
+
+    var homeworks: Homeworks? = null
+    var planList: List<Plan>? = null
 
     fun onBtnGetDataClicked() {
         viewModelScope.launch {
@@ -64,17 +64,23 @@ class MainViewModel : ViewModel() {
     }
 
     fun onBtnGoClicked() {
-        var tempBuf = "{"
-        val resList: List<Configuration> = ConfigurationDatabase
-            .getInstance(MainActivity.context)
-            .getConfigurationDao()
-            .getAll()
-        resList.forEach {
-            if (it.title == "icon") {
-                tempBuf += "\"${it.title}\": \"${it.content}\", "
+        homeworks = DataHandler.getHomeworksFromData()
+        planList = homeworks!!.getPlanList(stage = 'C')
+        if (planList!!.isEmpty()) {
+            debugContent = "planList is null or empty"
+            return
+        }
+        var tempResult = ""
+        var cnt = 0
+        planList!!.forEach {
+            if (listOf(Util.snToKing(it.h1.sn), Util.snToKing(it.h2.sn), Util.snToKing(it.h3.sn)) == listOf("C1", "C2", "C3")) {
+                cnt++
+                if (cnt <= 3) {
+                    tempResult += "number: ${cnt}\ndamage: ${it.damage}\nscore: ${it.score}\n[${it.sn}]\nborrow: ${it.borrow}\n${it.names}\nh1:\n${it.h1.video}\nh2:\n${it.h2.video}\nh3:\n${it.h3.video}\n\n\n"
+                }
             }
         }
-        debugContent = "${tempBuf.substring(0, tempBuf.length - 2)}}"
+        debugContent = tempResult
     }
 
 }

@@ -177,9 +177,9 @@ object DataHandler {
                     Homework(
                         name1 = name1,
                         name2 = name2,
-                        name3 = name2,
-                        name4 = name2,
-                        name5 = name2,
+                        name3 = name3,
+                        name4 = name4,
+                        name5 = name5,
                         auto = auto,
                         damage = damage,
                         remain = remain,
