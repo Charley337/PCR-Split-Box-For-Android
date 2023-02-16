@@ -73,10 +73,10 @@ class Homeworks(homeworkList: List<Homework>) {
     ): List<Plan> {
         val homeworkList: List<Homework> = getStage(stage)
         val planList: MutableList<Plan> = mutableListOf()
-        val length: Int = homeworkList.size
-        for (i in 0 until length) {
-            for (j in i + 1 until length) {
-                for (k in j + 1 until length) {
+        var limitCnt = 0
+        for (i in homeworkList.indices) {
+            for (j in i + 1 until homeworkList.size) {
+                for (k in j + 1 until homeworkList.size) {
                     if (
                         if (auto) {
                             (homeworkList[i].auto and homeworkList[j].auto and homeworkList[k].auto == 1) &&
@@ -94,6 +94,10 @@ class Homeworks(homeworkList: List<Homework>) {
                             planList.add(
                                 Plan(homeworkList[i], homeworkList[j], homeworkList[k], borrow)
                             )
+                            limitCnt++
+                            if (limitCnt >= 500000) {
+                                throw Exception("planList's size is out of limit($limitCnt)!")
+                            }
                         }
                     }
                 }
