@@ -2,7 +2,6 @@ package com.example.pcrsplitboxforandroid
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -187,13 +186,32 @@ fun SelectCard(mainViewModel: MainViewModel) {
 @Composable
 fun ResultCard(mainViewModel: MainViewModel) {
     CardBorder {
-        Button(
-            onClick = { mainViewModel.onBtnGoClicked() }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(text = "Go!")
+            Button(
+                enabled = mainViewModel.btnGoEnabled,
+                onClick = { mainViewModel.onBtnGoClicked() }
+            ) {
+                Text(text = "Go!")
+            }
+            Text(
+                text = mainViewModel.systemLog,
+                modifier = Modifier
+                    .fillMaxWidth(0.8F)
+                    .padding(start = 16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                    .horizontalScroll(rememberScrollState())
+            )
         }
         Text(
-            text = mainViewModel.resultContent,
+            text = mainViewModel.systemLog,
             modifier = Modifier
                 .fillMaxWidth(0.95F)
                 .fillMaxHeight()

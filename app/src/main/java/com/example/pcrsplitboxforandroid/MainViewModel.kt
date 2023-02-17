@@ -37,8 +37,10 @@ class MainViewModel : ViewModel() {
 
     var btnChooseStageState: Boolean by mutableStateOf(false)
     var btnListChooseBossState: List<Boolean> by mutableStateOf(listOf(false, false, false))
-    var resultContent: String by mutableStateOf("")
+    var systemLog: String by mutableStateOf("")
     var txtDataStateText: String by mutableStateOf("尚未获取数据")
+    var btnGoEnabled: Boolean by mutableStateOf(false)
+    var resultPlanList: List<Plan> by mutableStateOf(emptyList())
 
     var btnChooseStageText: String = "  请选择当前阶段  "
     val btnListChooseBossText: MutableList<String> = mutableListOf(
@@ -64,7 +66,7 @@ class MainViewModel : ViewModel() {
                 mainSemaphore.optionV()
             }
         } else {
-            resultContent = "mainSemaphore is locked! ${Date().time}"
+            systemLog = "请稍后操作！ ${Date().time}"
         }
     }
 
@@ -81,18 +83,21 @@ class MainViewModel : ViewModel() {
 
     fun onBtnGetPlanListClicked() {
         if (chooseStageState == 0) {
+            systemLog = "请选择阶段"
             return
         } else if (mainSemaphore.optionP()) {
             viewModelScope.launch(Dispatchers.Default) {
+                btnGoEnabled = false
                 homeworks = null
                 planList = null
                 homeworks = DataHandler.getHomeworksFromData()
                 planList = homeworks?.getPlanList(stage = Util.numberToEnChar[chooseStageState])
-                txtDataStateText = "已获取所有方案"
+                systemLog = "已获取所有方案"
+                btnGoEnabled = true
                 mainSemaphore.optionV()
             }
         } else {
-            resultContent = "mainSemaphore is locked! ${Date().time}"
+            systemLog = "请稍后操作！ ${Date().time}"
         }
     }
 
@@ -119,11 +124,13 @@ class MainViewModel : ViewModel() {
 
     fun onBtnGoClicked() {
         if (chooseBossState.contains(0)) {
+            systemLog = "请选择BOSS！ ${Date().time}"
             return
         } else if (mainSemaphore.optionP()) {
             viewModelScope.launch(Dispatchers.Default) {
                 if (planList == null || planList!!.isEmpty()) {
-                    resultContent = "planList is null or empty"
+                    systemLog = "尚未获取方案或者方案表为空"
+                    btnGoEnabled = false
                     return@launch
                 }
                 var tempResult = ""
@@ -134,19 +141,21 @@ class MainViewModel : ViewModel() {
                     "${Util.numberToEnChar[chooseStageState]}${tempSortedChooseBossState[1]}",
                     "${Util.numberToEnChar[chooseStageState]}${tempSortedChooseBossState[2]}"
                 )
-                planList!!.forEach {
+                for (i in planList!!.indices) {
+                    val it = planList!![i]
                     if (listOf(Util.snToKing(it.h1.sn), Util.snToKing(it.h2.sn), Util.snToKing(it.h3.sn)) == tempSortedKingList) {
                         cnt++
-                        if (cnt <= 10) {
-                            tempResult += "number: ${cnt}\ndamage: ${it.damage}\nscore: ${it.score}\n[${it.sn}]\nborrow: ${it.borrow}\n${it.names}\nh1:\n${it.h1.video}\nh2:\n${it.h2.video}\nh3:\n${it.h3.video}\n\n"
+                        tempResult += "number: ${cnt}\ndamage: ${it.damage}\nscore: ${it.score}\n[${it.sn}]\nborrow: ${it.borrow}\n${it.names}\nh1:\n${it.h1.video}\nh2:\n${it.h2.video}\nh3:\n${it.h3.video}\n\n"
+                        if (cnt >= 10) {
+                            break
                         }
                     }
                 }
-                resultContent = tempResult
+                systemLog = tempResult
                 mainSemaphore.optionV()
             }
         } else {
-            resultContent = "mainSemaphore is locked! ${Date().time}"
+            systemLog = "请稍后操作！ ${Date().time}"
         }
     }
 
