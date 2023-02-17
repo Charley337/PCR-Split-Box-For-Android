@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.example.pcrhelper.Util
 
 @Composable
-fun BaseCard(mainViewModel: MainViewModel) {
+fun BaseCard(mainViewModel: MainViewModel, mainActivity: MainActivity) {
     CardBorder {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -58,7 +58,7 @@ fun BaseCard(mainViewModel: MainViewModel) {
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .padding(top = 8.dp),
-                    onClick = { mainViewModel.onBtnGetDataClicked() }
+                    onClick = { mainViewModel.onBtnGetDataClicked(mainActivity) }
                 ) {
                     Text(text = "点击获取")
                 }
@@ -103,7 +103,7 @@ fun BaseCard(mainViewModel: MainViewModel) {
             }
             Button(
                 modifier = Modifier.clip(RoundedCornerShape(10.dp)),
-                onClick = { mainViewModel.onBtnGetPlanListClicked() }
+                onClick = { mainViewModel.onBtnGetPlanListClicked(mainActivity) }
             ) {
                 Text(text = "计算所有方案")
             }

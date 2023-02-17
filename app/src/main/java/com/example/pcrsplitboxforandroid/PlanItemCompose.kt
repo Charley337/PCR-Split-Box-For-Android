@@ -53,6 +53,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                 Text(
                     text = mainViewModel.resultPlanList[i].h1.sn,
                     modifier = Modifier.clickable {
+                        mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h1.sn)
                         mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h1.sn)
                     }
                 )
@@ -116,6 +117,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                 Text(
                     text = mainViewModel.resultPlanList[i].h2.sn,
                     modifier = Modifier.clickable {
+                        mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h2.sn)
                         mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h2.sn)
                     }
                 )
@@ -179,6 +181,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                 Text(
                     text = mainViewModel.resultPlanList[i].h3.sn,
                     modifier = Modifier.clickable {
+                        mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h3.sn)
                         mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h3.sn)
                     }
                 )

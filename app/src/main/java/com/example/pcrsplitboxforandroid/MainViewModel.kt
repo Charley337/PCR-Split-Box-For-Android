@@ -11,7 +11,6 @@ import com.example.pcrhelper.Plan
 import com.example.pcrhelper.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class MainViewModel : ViewModel() {
 
@@ -40,7 +39,7 @@ class MainViewModel : ViewModel() {
 
     var btnChooseStageState: Boolean by mutableStateOf(false)
     var btnListChooseBossState: List<Boolean> by mutableStateOf(listOf(false, false, false))
-    var systemLog: String by mutableStateOf("")
+    var tfValue: String by mutableStateOf("")
     var txtDataStateText: String by mutableStateOf("尚未获取数据")
     var btnGoEnabled: Boolean by mutableStateOf(false)
     var resultPlanList: List<Plan> by mutableStateOf(emptyList())
@@ -58,7 +57,7 @@ class MainViewModel : ViewModel() {
     var homeworks: Homeworks? = null
     var planList: List<Plan>? = null
 
-    fun onBtnGetDataClicked() {
+    fun onBtnGetDataClicked(mainActivity: MainActivity) {
         if (mainSemaphore.optionP()) {
             viewModelScope.launch {
                 txtDataStateText = if (DataHandler.getData() == listOf(true, true, true)) {
@@ -69,7 +68,7 @@ class MainViewModel : ViewModel() {
                 mainSemaphore.optionV()
             }
         } else {
-            systemLog = "请稍后操作！ ${Date().time}"
+            mainActivity.toastShortShow("请稍后操作！")
         }
     }
 
@@ -84,23 +83,23 @@ class MainViewModel : ViewModel() {
         btnChooseStageText = "  当前阶段:  ${Util.numberToEnChar[i]}  面  "
     }
 
-    fun onBtnGetPlanListClicked() {
+    fun onBtnGetPlanListClicked(mainActivity: MainActivity) {
         if (chooseStageState == 0) {
-            systemLog = "请选择阶段"
+            mainActivity.toastShortShow("请选择阶段")
             return
         } else if (mainSemaphore.optionP()) {
+            mainActivity.toastShortShow("计算中，请稍等")
             viewModelScope.launch(Dispatchers.Default) {
                 btnGoEnabled = false
                 homeworks = null
                 planList = null
                 homeworks = DataHandler.getHomeworksFromData()
                 planList = homeworks?.getPlanList(stage = Util.numberToEnChar[chooseStageState])
-                systemLog = "已获取所有方案"
                 btnGoEnabled = true
                 mainSemaphore.optionV()
             }
         } else {
-            systemLog = "请稍后操作！ ${Date().time}"
+            mainActivity.toastShortShow("请稍后操作！")
         }
     }
 
@@ -125,14 +124,14 @@ class MainViewModel : ViewModel() {
         btnListChooseBossState = tempList2
     }
 
-    fun onBtnGoClicked() {
+    fun onBtnGoClicked(mainActivity: MainActivity) {
         if (chooseBossState.contains(0)) {
-            systemLog = "请选择BOSS！ ${Date().time}"
+            mainActivity.toastShortShow("请选择BOSS！")
             return
         } else if (mainSemaphore.optionP()) {
             viewModelScope.launch(Dispatchers.Default) {
                 if (planList == null || planList!!.isEmpty()) {
-                    systemLog = "尚未获取方案或者方案表为空"
+                    mainActivity.toastShortShow("尚未获取方案或者方案表为空")
                     btnGoEnabled = false
                     return@launch
                 }
@@ -144,13 +143,23 @@ class MainViewModel : ViewModel() {
                     "${Util.numberToEnChar[chooseStageState]}${tempSortedChooseBossState[1]}",
                     "${Util.numberToEnChar[chooseStageState]}${tempSortedChooseBossState[2]}"
                 )
+                val tempUsedSn: List<String> = tfValue.split(" ")
                 for (i in planList!!.indices) {
                     val it = planList!![i]
                     if (listOf(Util.snToKing(it.h1.sn), Util.snToKing(it.h2.sn), Util.snToKing(it.h3.sn)) == tempSortedKingList) {
-                        cnt++
-                        tempResultPlanList.add(it)
-                        if (cnt >= 10) {
-                            break
+                        var tempFlag: Boolean = true
+                        for (j in tempUsedSn.indices) {
+                            tempFlag = tempFlag && it.sn.contains(tempUsedSn[j])
+                            if (!tempFlag) {
+                                break
+                            }
+                        }
+                        if (tempFlag) {
+                            cnt++
+                            tempResultPlanList.add(it)
+                            if (cnt >= 10) {
+                                break
+                            }
                         }
                     }
                 }
@@ -158,7 +167,15 @@ class MainViewModel : ViewModel() {
                 mainSemaphore.optionV()
             }
         } else {
-            systemLog = "请稍后操作！ ${Date().time}"
+            mainActivity.toastShortShow("请稍后操作！")
+        }
+    }
+
+    fun onSnClicked(sn: String) {
+        if (tfValue.isEmpty()) {
+            tfValue = sn
+        } else {
+            tfValue += " $sn"
         }
     }
 

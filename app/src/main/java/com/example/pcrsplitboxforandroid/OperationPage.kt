@@ -16,7 +16,7 @@ fun OperationPage(mainViewModel: MainViewModel, mainActivity: MainActivity) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        BaseCard(mainViewModel)
+        BaseCard(mainViewModel, mainActivity)
         SelectCard(mainViewModel)
         ResultCard(mainViewModel, mainActivity)
     }
