@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ResultCard(mainViewModel: MainViewModel) {
+fun ResultCard(mainViewModel: MainViewModel, mainActivity: MainActivity) {
     CardBorder {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -44,7 +44,7 @@ fun ResultCard(mainViewModel: MainViewModel) {
             )
         }
         for (i in mainViewModel.resultPlanList.indices) {
-            PlanItem(mainViewModel, i)
+            PlanItem(mainViewModel, mainActivity, i)
         }
     }
 }

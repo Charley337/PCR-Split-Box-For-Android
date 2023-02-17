@@ -12,7 +12,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PlanItem(mainViewModel: MainViewModel, i: Int) {
+fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
+    Text(
+        text = "方案${i + 1}    伤害：${mainViewModel.resultPlanList[i].damage}W    毛分：${mainViewModel.resultPlanList[i].score}",
+        modifier = Modifier
+            .fillMaxWidth(0.9F)
+            .padding(bottom = 4.dp)
+    )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
@@ -40,9 +46,16 @@ fun PlanItem(mainViewModel: MainViewModel, i: Int) {
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
             ) {
-                Text(text = "第1刀：")
+                Text(
+                    text = mainViewModel.resultPlanList[i].h1.sn,
+                    modifier = Modifier.clickable {
+                        mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h1.sn)
+                    }
+                )
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically,
@@ -73,7 +86,9 @@ fun PlanItem(mainViewModel: MainViewModel, i: Int) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            /*TODO*/
+                            mainActivity.jumpToBrowserActivity(
+                                mainViewModel.resultPlanList[i].h1.video[j].url
+                            )
                         }
                 )
             }
@@ -94,9 +109,16 @@ fun PlanItem(mainViewModel: MainViewModel, i: Int) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
             ) {
-                Text(text = "第2刀：")
+                Text(
+                    text = mainViewModel.resultPlanList[i].h2.sn,
+                    modifier = Modifier.clickable {
+                        mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h2.sn)
+                    }
+                )
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically,
@@ -127,7 +149,9 @@ fun PlanItem(mainViewModel: MainViewModel, i: Int) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            /*TODO*/
+                            mainActivity.jumpToBrowserActivity(
+                                mainViewModel.resultPlanList[i].h1.video[j].url
+                            )
                         }
                 )
             }
@@ -148,9 +172,16 @@ fun PlanItem(mainViewModel: MainViewModel, i: Int) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
             ) {
-                Text(text = "第3刀：")
+                Text(
+                    text = mainViewModel.resultPlanList[i].h3.sn,
+                    modifier = Modifier.clickable {
+                        mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h3.sn)
+                    }
+                )
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically,
@@ -181,7 +212,9 @@ fun PlanItem(mainViewModel: MainViewModel, i: Int) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            /*TODO*/
+                            mainActivity.jumpToBrowserActivity(
+                                mainViewModel.resultPlanList[i].h1.video[j].url
+                            )
                         }
                 )
             }

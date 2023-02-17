@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun OperationPage(mainViewModel: MainViewModel) {
+fun OperationPage(mainViewModel: MainViewModel, mainActivity: MainActivity) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -18,6 +18,6 @@ fun OperationPage(mainViewModel: MainViewModel) {
     ) {
         BaseCard(mainViewModel)
         SelectCard(mainViewModel)
-        ResultCard(mainViewModel)
+        ResultCard(mainViewModel, mainActivity)
     }
 }
