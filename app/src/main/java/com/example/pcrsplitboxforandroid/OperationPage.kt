@@ -1,9 +1,8 @@
 package com.example.pcrsplitboxforandroid
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -77,7 +76,7 @@ fun BaseCard(mainViewModel: MainViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "尚未获取数据", fontWeight = FontWeight.Bold)
+                Text(text = mainViewModel.txtDataStateText, fontWeight = FontWeight.Bold)
                 Button(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -127,7 +126,7 @@ fun BaseCard(mainViewModel: MainViewModel) {
             }
             Button(
                 modifier = Modifier.clip(RoundedCornerShape(10.dp)),
-                onClick = { /*TODO*/ }
+                onClick = { mainViewModel.onBtnGetPlanListClicked() }
             ) {
                 Text(text = "计算所有方案")
             }
@@ -188,15 +187,24 @@ fun SelectCard(mainViewModel: MainViewModel) {
 @Composable
 fun ResultCard(mainViewModel: MainViewModel) {
     CardBorder {
-        /*TODO*/
         Button(
             onClick = { mainViewModel.onBtnGoClicked() }
         ) {
             Text(text = "Go!")
         }
         Text(
-            text = "Debug Log\n${mainViewModel.debugContent}",
-            modifier = Modifier.fillMaxWidth(0.9F).padding(bottom = 16.dp)
+            text = mainViewModel.resultContent,
+            modifier = Modifier
+                .fillMaxWidth(0.95F)
+                .fillMaxHeight()
+                .padding(bottom = 10.dp)
+                .border(
+                    width = 2.dp,
+                    color = Color.Gray,
+                    shape = RoundedCornerShape(15.dp)
+                )
+                .padding(10.dp)
+                .verticalScroll(rememberScrollState())
         )
     }
 }
