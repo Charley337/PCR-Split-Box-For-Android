@@ -5,10 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pcrhelper.*
+import com.example.pcrhelper.DataHandler
+import com.example.pcrhelper.Homeworks
+import com.example.pcrhelper.Plan
+import com.example.pcrhelper.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
+import java.util.*
 
 class MainViewModel : ViewModel() {
 
@@ -133,7 +136,7 @@ class MainViewModel : ViewModel() {
                     btnGoEnabled = false
                     return@launch
                 }
-                var tempResult = ""
+                val tempResultPlanList: MutableList<Plan> = mutableListOf()
                 var cnt = 0
                 val tempSortedChooseBossState = chooseBossState.sorted()
                 val tempSortedKingList: List<String> = listOf(
@@ -145,13 +148,13 @@ class MainViewModel : ViewModel() {
                     val it = planList!![i]
                     if (listOf(Util.snToKing(it.h1.sn), Util.snToKing(it.h2.sn), Util.snToKing(it.h3.sn)) == tempSortedKingList) {
                         cnt++
-                        tempResult += "number: ${cnt}\ndamage: ${it.damage}\nscore: ${it.score}\n[${it.sn}]\nborrow: ${it.borrow}\n${it.names}\nh1:\n${it.h1.video}\nh2:\n${it.h2.video}\nh3:\n${it.h3.video}\n\n"
+                        tempResultPlanList.add(it)
                         if (cnt >= 10) {
                             break
                         }
                     }
                 }
-                systemLog = tempResult
+                resultPlanList = tempResultPlanList
                 mainSemaphore.optionV()
             }
         } else {
