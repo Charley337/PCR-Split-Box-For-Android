@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pcrhelper.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class MainViewModel : ViewModel() {
 
@@ -62,6 +63,8 @@ class MainViewModel : ViewModel() {
                 }
                 mainSemaphore.optionV()
             }
+        } else {
+            resultContent = "mainSemaphore is locked! ${Date().time}"
         }
     }
 
@@ -88,6 +91,8 @@ class MainViewModel : ViewModel() {
                 txtDataStateText = "已获取所有方案"
                 mainSemaphore.optionV()
             }
+        } else {
+            resultContent = "mainSemaphore is locked! ${Date().time}"
         }
     }
 
@@ -132,12 +137,16 @@ class MainViewModel : ViewModel() {
                 planList!!.forEach {
                     if (listOf(Util.snToKing(it.h1.sn), Util.snToKing(it.h2.sn), Util.snToKing(it.h3.sn)) == tempSortedKingList) {
                         cnt++
-                        tempResult += "number: ${cnt}\ndamage: ${it.damage}\nscore: ${it.score}\n[${it.sn}]\nborrow: ${it.borrow}\n${it.names}\nh1:\n${it.h1.video}\nh2:\n${it.h2.video}\nh3:\n${it.h3.video}\n\n"
+                        if (cnt <= 10) {
+                            tempResult += "number: ${cnt}\ndamage: ${it.damage}\nscore: ${it.score}\n[${it.sn}]\nborrow: ${it.borrow}\n${it.names}\nh1:\n${it.h1.video}\nh2:\n${it.h2.video}\nh3:\n${it.h3.video}\n\n"
+                        }
                     }
                 }
                 resultContent = tempResult
                 mainSemaphore.optionV()
             }
+        } else {
+            resultContent = "mainSemaphore is locked! ${Date().time}"
         }
     }
 
