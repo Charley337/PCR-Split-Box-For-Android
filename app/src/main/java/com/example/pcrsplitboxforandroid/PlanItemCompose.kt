@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
     Text(
-        text = "方案${i + 1}    伤害：${mainViewModel.resultPlanList[i].damage}W    毛分：${mainViewModel.resultPlanList[i].score}",
+        text = "方案${i + 1}    伤害：${mainViewModel.resultPlanList[i].damage}W    毛分：${mainViewModel.resultPlanList[i].score}W",
         modifier = Modifier
             .fillMaxWidth(0.9F)
             .padding(bottom = 4.dp)
@@ -26,7 +26,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
             .fillMaxWidth(0.9F)
             .padding(bottom = 16.dp)
             .border(
-                width = 1.dp,
+                width = 2.dp,
                 color = Color.Gray,
                 shape = RoundedCornerShape(4.dp)
             )
@@ -54,7 +54,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                     text = mainViewModel.resultPlanList[i].h1.sn,
                     modifier = Modifier.clickable {
                         mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h1.sn)
-                        mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h1.sn)
+                        mainActivity.toastShortShow("已添加到已使用列表")
                     }
                 )
                 Row(
@@ -86,6 +86,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                     text = mainViewModel.resultPlanList[i].h1.video[j].url,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                         .clickable {
                             mainActivity.jumpToBrowserActivity(
                                 mainViewModel.resultPlanList[i].h1.video[j].url
@@ -118,7 +119,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                     text = mainViewModel.resultPlanList[i].h2.sn,
                     modifier = Modifier.clickable {
                         mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h2.sn)
-                        mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h2.sn)
+                        mainActivity.toastShortShow("已添加到已使用列表")
                     }
                 )
                 Row(
@@ -150,6 +151,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                     text = mainViewModel.resultPlanList[i].h2.video[j].url,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                         .clickable {
                             mainActivity.jumpToBrowserActivity(
                                 mainViewModel.resultPlanList[i].h1.video[j].url
@@ -182,7 +184,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                     text = mainViewModel.resultPlanList[i].h3.sn,
                     modifier = Modifier.clickable {
                         mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h3.sn)
-                        mainActivity.copyToClipboard(mainViewModel.resultPlanList[i].h3.sn)
+                        mainActivity.toastShortShow("已添加到已使用列表")
                     }
                 )
                 Row(
@@ -214,6 +216,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                     text = mainViewModel.resultPlanList[i].h3.video[j].url,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                         .clickable {
                             mainActivity.jumpToBrowserActivity(
                                 mainViewModel.resultPlanList[i].h1.video[j].url

@@ -147,7 +147,7 @@ class MainViewModel : ViewModel() {
                 for (i in planList!!.indices) {
                     val it = planList!![i]
                     if (listOf(Util.snToKing(it.h1.sn), Util.snToKing(it.h2.sn), Util.snToKing(it.h3.sn)) == tempSortedKingList) {
-                        var tempFlag: Boolean = true
+                        var tempFlag = true
                         for (j in tempUsedSn.indices) {
                             tempFlag = tempFlag && it.sn.contains(tempUsedSn[j])
                             if (!tempFlag) {
@@ -157,7 +157,7 @@ class MainViewModel : ViewModel() {
                         if (tempFlag) {
                             cnt++
                             tempResultPlanList.add(it)
-                            if (cnt >= 10) {
+                            if (cnt >= 15) {
                                 break
                             }
                         }
@@ -174,6 +174,8 @@ class MainViewModel : ViewModel() {
     fun onSnClicked(sn: String) {
         if (tfValue.isEmpty()) {
             tfValue = sn
+        } else if (tfValue.last() == ' ') {
+            tfValue += sn
         } else {
             tfValue += " $sn"
         }

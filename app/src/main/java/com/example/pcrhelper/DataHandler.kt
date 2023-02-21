@@ -20,10 +20,10 @@ data class RequestResult(
 object DataHandler {
 
     private const val baseUrl: String = "https://www.caimogu.cc"
-//    private const val iconUrl: String = "/gzlj/data/icon?date=&lang=zh-cn"
-//    private const val dataUrl: String = "/gzlj/data?date=&lang=zh-ch"
-    private const val iconUrl: String = "/gzlj/data/icon?date=2022-11&lang=zh-cn"
-    private const val dataUrl: String = "/gzlj/data?date=2022-11&lang=zh-cn"
+    private const val iconUrl: String = "/gzlj/data/icon?date=&lang=zh-cn"
+    private const val dataUrl: String = "/gzlj/data?date=&lang=zh-ch"
+//    private const val iconUrl: String = "/gzlj/data/icon?date=2022-11&lang=zh-cn"
+//    private const val dataUrl: String = "/gzlj/data?date=2022-11&lang=zh-cn"
 
     private suspend fun getByUrlAndSave(baseUrl: String, pathUrl: String, title: String): RequestResult {
         return withContext(Dispatchers.IO) {

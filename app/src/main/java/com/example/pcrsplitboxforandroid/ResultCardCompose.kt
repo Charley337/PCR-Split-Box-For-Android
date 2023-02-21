@@ -1,5 +1,7 @@
 package com.example.pcrsplitboxforandroid
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +39,14 @@ fun ResultCard(mainViewModel: MainViewModel, mainActivity: MainActivity) {
                 onValueChange = { mainViewModel.tfValue = it },
                 modifier = Modifier
                     .fillMaxWidth(0.7F)
-                    .horizontalScroll(rememberScrollState())
+                    .horizontalScroll(rememberScrollState()),
+                trailingIcon = @Composable {
+                    Image(
+                        imageVector = Icons.Filled.Clear,
+                        contentDescription = null,
+                        modifier = Modifier.clickable { mainViewModel.tfValue = "" }
+                    )
+                }
             )
         }
         for (i in mainViewModel.resultPlanList.indices) {
