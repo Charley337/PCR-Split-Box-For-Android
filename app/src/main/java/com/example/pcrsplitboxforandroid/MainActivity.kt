@@ -11,17 +11,19 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.pcrsplitboxforandroid.ui.theme.PcrSplitBoxForAndroidTheme
 
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
+    private val mainActivity: MainActivity = this
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -33,14 +35,32 @@ class MainActivity : ComponentActivity() {
         context = applicationContext
         setContent {
             PcrSplitBoxForAndroidTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    color = MaterialTheme.colors.background
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top,
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    OperationPage(mainViewModel, this)
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.94F)
+                            .verticalScroll(rememberScrollState()),
+                        color = MaterialTheme.colors.background
+                    ) {
+                        when (mainViewModel.navigationIndex) {
+                            0 -> {
+                                OperationPage(mainViewModel, mainActivity)
+                            }
+                            1 -> {
+                                SettingPage(mainViewModel)
+                            }
+                            else -> {
+                                throw Exception("未定义的导航页号: ${mainViewModel.navigationIndex}")
+                            }
+                        }
+                    }
+                    BottomNavigationCompose(mainViewModel)
                 }
             }
         }

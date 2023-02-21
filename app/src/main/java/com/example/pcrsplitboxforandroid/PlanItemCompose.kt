@@ -15,6 +15,10 @@ import androidx.compose.ui.unit.dp
 fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
     Text(
         text = "方案${i + 1}    伤害：${mainViewModel.resultPlanList[i].damage}W    毛分：${mainViewModel.resultPlanList[i].score}W",
+        modifier = Modifier.fillMaxWidth(0.9F)
+    )
+    Text(
+        text = "需要嫖： ${mainViewModel.resultPlanList[i].borrow}",
         modifier = Modifier
             .fillMaxWidth(0.9F)
             .padding(bottom = 4.dp)

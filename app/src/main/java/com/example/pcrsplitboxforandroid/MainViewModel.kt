@@ -5,12 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pcrhelper.DataHandler
-import com.example.pcrhelper.Homeworks
-import com.example.pcrhelper.Plan
-import com.example.pcrhelper.Util
+import com.example.pcrhelper.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 
 class MainViewModel : ViewModel() {
 
@@ -43,6 +41,9 @@ class MainViewModel : ViewModel() {
     var txtDataStateText: String by mutableStateOf("尚未获取数据")
     var btnGoEnabled: Boolean by mutableStateOf(false)
     var resultPlanList: List<Plan> by mutableStateOf(emptyList())
+    var navigationIndex: Int by mutableStateOf(0)
+    var tfBanListValue: String by mutableStateOf("")
+    var tfLackListValue: String by mutableStateOf("")
 
     var btnChooseStageText: String = "  请选择当前阶段  "
     val btnListChooseBossText: MutableList<String> = mutableListOf(
@@ -179,6 +180,53 @@ class MainViewModel : ViewModel() {
         } else {
             tfValue += " $sn"
         }
+    }
+
+    fun onBottomNavigationClicked(item: Int) {
+        if (navigationIndex == item) {
+            return
+        }
+        when (item) {
+            0 -> {
+                /*save to banList and lackList*/
+                val tempBanList: MutableList<String> =
+                    tfBanListValue.split(' ').toMutableList()
+                val tempLackList: MutableList<String> =
+                    tfLackListValue.split(' ').toMutableList()
+                while (tempBanList.remove("")) { continue }
+                while (tempLackList.remove("")) { continue }
+                if (Util.banList.toSet() != tempBanList.toSet()) {
+                    Util.banList = tempBanList
+                    /*save to Room database*/
+                    ConfigurationDatabase
+                        .getInstance(MainActivity.context)
+                        .getConfigurationDao()
+                        .insertConfig(Configuration("banList", JSONArray(tempBanList).toString()))
+                }
+                if (Util.lackList.toSet() != tempLackList.toSet()) {
+                    Util.lackList = tempLackList
+                    /*save to Room database*/
+                    ConfigurationDatabase
+                        .getInstance(MainActivity.context)
+                        .getConfigurationDao()
+                        .insertConfig(Configuration("lackList", JSONArray(tempLackList).toString()))
+                }
+            }
+            1 -> {
+                /*load from banList and lackList*/
+                var tempTfBanListValue = ""
+                var tempTfLackListValue = ""
+                for (i in Util.banList.indices) {
+                    tempTfBanListValue += "${Util.banList[i]} "
+                }
+                for (i in Util.lackList.indices) {
+                    tempTfLackListValue += "${Util.lackList[i]} "
+                }
+                tfBanListValue = tempTfBanListValue
+                tfLackListValue = tempTfLackListValue
+            }
+        }
+        navigationIndex = item
     }
 
 }
