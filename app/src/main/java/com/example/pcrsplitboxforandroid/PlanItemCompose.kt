@@ -158,7 +158,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                         .padding(bottom = 8.dp)
                         .clickable {
                             mainActivity.jumpToBrowserActivity(
-                                mainViewModel.resultPlanList[i].h1.video[j].url
+                                mainViewModel.resultPlanList[i].h2.video[j].url
                             )
                         }
                 )
@@ -223,7 +223,7 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
                         .padding(bottom = 8.dp)
                         .clickable {
                             mainActivity.jumpToBrowserActivity(
-                                mainViewModel.resultPlanList[i].h1.video[j].url
+                                mainViewModel.resultPlanList[i].h3.video[j].url
                             )
                         }
                 )
