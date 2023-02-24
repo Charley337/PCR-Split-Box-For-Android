@@ -68,7 +68,7 @@ class Homeworks(homeworkList: List<Homework>) {
     fun getPlanList(
         stage: Char,
         sortKey: String = "score",
-        reverse: Boolean = false,
+        reverse: Boolean = true,
         auto: Boolean = true
     ): List<Plan> {
         val homeworkList: List<Homework> = getStage(stage)
