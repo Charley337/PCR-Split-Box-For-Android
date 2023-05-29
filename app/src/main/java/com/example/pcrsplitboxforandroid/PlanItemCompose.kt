@@ -1,7 +1,9 @@
 package com.example.pcrsplitboxforandroid
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -11,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
     Text(
@@ -56,10 +59,17 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
             ) {
                 Text(
                     text = mainViewModel.resultPlanList[i].h1.sn,
-                    modifier = Modifier.clickable {
-                        mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h1.sn)
-                        mainActivity.toastShortShow("已添加到已使用列表")
-                    }
+                    modifier = Modifier.combinedClickable(
+                        enabled = true,
+                        onClick = {
+                            mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h1.sn)
+                            mainActivity.toastShortShow("已添加到已使用列表")
+                        },
+                        onLongClick = {
+                            mainViewModel.onSnLongClicked(mainViewModel.resultPlanList[i].h1.sn)
+                            mainActivity.toastShortShow("已添加到禁用列表")
+                        }
+                    )
                 )
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -121,10 +131,17 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
             ) {
                 Text(
                     text = mainViewModel.resultPlanList[i].h2.sn,
-                    modifier = Modifier.clickable {
-                        mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h2.sn)
-                        mainActivity.toastShortShow("已添加到已使用列表")
-                    }
+                    modifier = Modifier.combinedClickable(
+                        enabled = true,
+                        onClick = {
+                            mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h2.sn)
+                            mainActivity.toastShortShow("已添加到已使用列表")
+                        },
+                        onLongClick = {
+                            mainViewModel.onSnLongClicked(mainViewModel.resultPlanList[i].h2.sn)
+                            mainActivity.toastShortShow("已添加到禁用列表")
+                        }
+                    )
                 )
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -186,10 +203,17 @@ fun PlanItem(mainViewModel: MainViewModel, mainActivity: MainActivity, i: Int) {
             ) {
                 Text(
                     text = mainViewModel.resultPlanList[i].h3.sn,
-                    modifier = Modifier.clickable {
-                        mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h3.sn)
-                        mainActivity.toastShortShow("已添加到已使用列表")
-                    }
+                    modifier = Modifier.combinedClickable(
+                        enabled = true,
+                        onClick = {
+                            mainViewModel.onSnClicked(mainViewModel.resultPlanList[i].h3.sn)
+                            mainActivity.toastShortShow("已添加到已使用列表")
+                        },
+                        onLongClick = {
+                            mainViewModel.onSnLongClicked(mainViewModel.resultPlanList[i].h3.sn)
+                            mainActivity.toastShortShow("已添加到禁用列表")
+                        }
+                    )
                 )
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,

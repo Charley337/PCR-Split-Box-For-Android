@@ -38,6 +38,7 @@ class MainViewModel : ViewModel() {
     var btnChooseStageState: Boolean by mutableStateOf(false)
     var btnListChooseBossState: List<Boolean> by mutableStateOf(listOf(false, false, false))
     var tfValue: String by mutableStateOf("")
+    var tfValueBan: String by mutableStateOf("")
     var txtDataStateText: String by mutableStateOf("尚未获取数据")
     var btnGoEnabled: Boolean by mutableStateOf(false)
     var resultPlanList: List<Plan> by mutableStateOf(emptyList())
@@ -145,14 +146,25 @@ class MainViewModel : ViewModel() {
                     "${Util.numberToEnChar[chooseStageState]}${tempSortedChooseBossState[2]}"
                 )
                 val tempUsedSn: List<String> = tfValue.split(" ")
+                val tempBannedSn: List<String> = tfValueBan.split(" ")
                 for (i in planList!!.indices) {
                     val it = planList!![i]
                     if (listOf(Util.snToKing(it.h1.sn), Util.snToKing(it.h2.sn), Util.snToKing(it.h3.sn)) == tempSortedKingList) {
                         var tempFlag = true
-                        for (j in tempUsedSn.indices) {
-                            tempFlag = tempFlag && it.sn.contains(tempUsedSn[j])
-                            if (!tempFlag) {
-                                break
+                        if (tfValue != "") {
+                            for (j in tempUsedSn.indices) {
+                                tempFlag = tempFlag && it.sn.contains(tempUsedSn[j])
+                                if (!tempFlag) {
+                                    break
+                                }
+                            }
+                        }
+                        if (tfValueBan != "") {
+                            for (j in tempBannedSn.indices) {
+                                tempFlag = tempFlag && (!(it.sn.contains(tempBannedSn[j])))
+                                if (!tempFlag) {
+                                    break
+                                }
                             }
                         }
                         if (tempFlag) {
@@ -179,6 +191,16 @@ class MainViewModel : ViewModel() {
             tfValue += sn
         } else {
             tfValue += " $sn"
+        }
+    }
+
+    fun onSnLongClicked(sn: String) {
+        if (tfValueBan.isEmpty()) {
+            tfValueBan = sn
+        } else if (tfValueBan.last() == ' ') {
+            tfValueBan += sn
+        } else {
+            tfValueBan += " $sn"
         }
     }
 
